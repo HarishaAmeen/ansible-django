@@ -1,0 +1,23 @@
+---
+- name: Ensure package cache is up to date
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+  tags:
+    - Debian
+
+- name: Install the package "{{pip_pkg}}"
+  apt:
+    name: "{{pip_pkg}}"
+    state: present
+  when: ansible_os_family == "Debian"
+  tags:
+    - Debian
+
+# Install django python package.
+- pip:
+    name: django
+  when: ansible_os_family == "Debian"
+  tags:
+    - Debian
