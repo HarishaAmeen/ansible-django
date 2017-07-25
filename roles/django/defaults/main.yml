@@ -1,0 +1,13 @@
+---
+# configure env
+pip_pkg: 'python-pip'
+is_virtualenv: false
+user: django
+user_home: "/home/{{user}}"
+
+#django project specific vars
+project_name: my_website
+project_dir: "{{user_home}}/{{project_name}}"
+migrate: true
+server_port: 8000
+server_ip: localhost

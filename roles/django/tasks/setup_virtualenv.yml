@@ -1,0 +1,62 @@
+---
+# Install django python package.
+- pip:
+    name: virtualenv
+  when: ansible_os_family == "Debian"
+  tags:
+    - Debian
+
+- name: "create {{user}} group"
+  group:
+    name: "{{user}}"
+    state: present
+
+- name: "Create {{user}} user"
+  user:
+    name: "{{user}}"
+    group: "{{user}}"
+    state: present
+    shell: /bin/bash
+    comment: django installation user
+    home: "{{user_home}}"
+
+- name: create virtualenv directory
+  file:
+    path: "{{user_home}}/newproject"
+    state: directory
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: 0755
+
+- name: create virtual environment
+  command: virtualenv newenv
+  args:
+    chdir: "{{user_home}}/newproject"
+    creates: "{{user_home}}/newproject/newenv"
+  become: yes
+  become_user: "{{user}}"
+
+# Install specified python requirements in indicated (virtualenv).
+- name: install django in virtual env
+  pip:
+    name: django
+    virtualenv: "{{user_home}}/newproject/newenv"
+
+- name: create .bash_profile
+  file:
+    path: "{{user_home}}/.bash_profile"
+    state: touch
+    owner: "{{user}}"
+    group: "{{user}}"
+    mode: 0544
+
+- name: add virtual env info in .bash_profile
+  lineinfile:
+    dest: "{{user_home}}/.bash_profile"
+    line: 'source ~/newproject/newenv/bin/activate'
+  become: yes
+  become_user: "{{user}}"
+
+
+
+
