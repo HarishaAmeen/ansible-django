@@ -1,4 +1,4 @@
-#Documentation
+
 Author:
 Harisha Ameen
 
@@ -30,3 +30,6 @@ project_dir: "{{user_home}}/{{project_name}}"    #Project directory
 migrate: true                                    #To bootstrap the database on more recent versions of Django
 server_port: 8000                                #django web application listen port
 server_ip: localhost                             #django web application listen address
+
+Simple override command line argument example:
+ansible-playbook django.yml --extra-vars 'is_virtualenv=true create_project=true server_port=80 server_ip=192.168.0.3'
